@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+
+<context:component-scan base-package="com.jang.biz"/>
+<!-- com.jang.biz라는 패키지를 스캔해라 -->
+
+<aop:aspectj-autoproxy/>
+<!-- 지금부터 나는 aop를 @으로 할거야 -->
+
+<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+	<property name="url" value="jdbc:mysql://localhost:3306/jang"/>
+	<property name="username" value="root"/>
+	<property name="password" value="7418569"/>
+	<!-- String 값을 넣는 것이기 때문에 value -->
+</bean>
+
+<!-- Spring 에서 사용하는 JDBC 설정하기 -->
+<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+      <property name="dataSource" ref="dataSource" />
+</bean>
+<!-- dataSourcd 와 jdbcTemplate는 의존관계 이므로 setter인젝션 방식으로 DI -->
+
+
+
+<!--  
+ <bean id="logAdvice" class="com.jang.biz.common.LogAdvice"/>
+ <bean id="aroundAdvice" class="com.jang.biz.common.AroundAdvice"/>
+ <bean id="ara" class="com.jang.biz.common.AfterReturningAdvice"/>
+ <bean id="ata" class="com.jang.biz.common.AfterThrowingAdvice"/> 
+-->
+ 
+<!--  <aop:config>
+ 	<aop:pointcut expression="execution(* com.jang.biz..*Impl.*(..))" id="aPointcut"/>
+ 	aPointcut 이라는 이름으로 com.jang.biz패키지 안에 Impl로 끝나는 모든 클래스의 모든 메서드 모든인자 를 표현
+ 	<aop:pointcut expression="execution(* com.jang.biz..*Impl.select*(..))" id="bPointcut"/>
+ 	
+ 	<aop:aspect ref="logAdvice"> 결합
+ 		<aop:before method="printLog" pointcut-ref="aPointcut"/>
+ 		aPointcut의 해당하는 함수가 실행되기 전에 logAdvice클래스의 printlog함수를 실행
+ 	</aop:aspect>
+ 	
+ 	<aop:aspect ref="ara"> 결합
+ 		<aop:after-returning method="printLogAfterReturning" pointcut-ref="bPointcut" returning="returnObj"/>
+ 		aPointcut의 해당하는 함수가 실행되기 전에 logAdvice클래스의 printlog함수를 실행
+ 		returning="returnObj" 바인드변수의 객체를 넣어라
+ 	</aop:aspect>
+ 	
+ 	<aop:aspect ref="ata"> 결합
+ 		<aop:after-throwing method="printLogAfterThrowingAdvice" pointcut-ref="bPointcut" throwing="exceptionObj"/>
+ 		aPointcut의 해당하는 함수가 실행되기 전에 logAdvice클래스의 printlog함수를 실행
+ 		throwinging="exceptionObj" 바인드변수의 객체를 넣어라
+ 	</aop:aspect>
+ 	
+ 	<aop:aspect ref="aroundAdvice"> 결합
+ 		<aop:around method="printLogAround" pointcut-ref="aPointcut"/>
+ 	</aop:aspect>
+ 	
+ </aop:config> -->
+
+
+</beans>
